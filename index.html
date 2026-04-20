@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoneyDecoded</title>
+<meta name="description" content="Making personal finance actually make sense.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f0d;
+    --surface: #1a1a17;
+    --border: #2a2a26;
+    --text: #f0ede6;
+    --muted: #6b6860;
+    --accent: #c8f060;
+    --accent-dim: #a8d040;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Instrument Sans', sans-serif;
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* subtle grid texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+  }
+
+  /* Avatar / logo mark */
+  .logo-mark {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .logo-mark svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .name {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    animation: fadeUp 0.5s 0.08s ease both;
+  }
+
+  .tagline {
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+    max-width: 260px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.5s 0.14s ease both;
+  }
+
+  /* Links */
+  .links {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .link-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s, background 0.15s, transform 0.12s;
+    cursor: pointer;
+  }
+  .link-item:hover {
+    border-color: var(--accent);
+    background: #1f1f1c;
+    transform: translateY(-1px);
+  }
+  .link-item:active { transform: translateY(0); }
+
+  .link-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+  .link-item:hover .link-icon {
+    border-color: var(--accent);
+  }
+
+  .link-body { flex: 1; }
+  .link-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1px;
+  }
+  .link-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .link-arrow {
+    color: var(--muted);
+    font-size: 16px;
+    transition: color 0.15s, transform 0.15s;
+  }
+  .link-item:hover .link-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+  }
+
+  /* Divider label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin: 20px 0 10px;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before,
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Staggered animation */
+  .link-item:nth-child(1) { animation: fadeUp 0.4s 0.2s ease both; }
+  .link-item:nth-child(2) { animation: fadeUp 0.4s 0.28s ease both; }
+  .link-item:nth-child(3) { animation: fadeUp 0.4s 0.36s ease both; }
+  .link-item:nth-child(4) { animation: fadeUp 0.4s 0.44s ease both; }
+  .link-item:nth-child(5) { animation: fadeUp 0.4s 0.52s ease both; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    animation: fadeUp 0.4s 0.6s ease both;
+  }
+  .footer a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .footer a:hover { color: var(--accent); }
+
+  /* "Coming soon" badge */
+  .badge {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 100px;
+    background: #2a2a26;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .badge.live {
+    background: rgba(200, 240, 96, 0.1);
+    color: var(--accent);
+    border-color: rgba(200, 240, 96, 0.25);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="logo-mark">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 22L6 10M11 22V6M16 22V13M21 22V9" stroke="#0f0f0d" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="name">MoneyDecoded</div>
+  <div class="tagline">Making personal finance actually make sense.</div>
+
+  <div class="links">
+
+    <a class="link-item" href="https://moneydecoded.net" target="_blank" rel="noopener">
+      <div class="link-icon">✍️</div>
+      <div class="link-body">
+        <div class="link-title">Blog</div>
+        <div class="link-sub">Articles on investing, saving & more</div>
+      </div>
+      <span class="badge live">Live</span>
+      <span class="link-arrow">→</span>
+    </a>
+
+    <a class="link-item" href="https://tools.moneydecoded.net" target="_blank" rel="noopener">
+      <div class="link-icon">🧮</div>
+      <div class="link-body">
+        <div class="link-title">Financial Tools</div>
+        <div class="link-sub">Compound interest, loans, ETF comparison</div>
+      </div>
+      <span class="badge live">Live</span>
+      <span class="link-arrow">→</span>
+    </a>
+
+  </div>
+
+  <div class="section-label" style="animation: fadeUp 0.4s 0.42s ease both;">Coming soon</div>
+
+  <div class="links">
+
+    <div class="link-item" style="opacity:0.5;cursor:default;" onclick="return false">
+      <div class="link-icon">📬</div>
+      <div class="link-body">
+        <div class="link-title">Newsletter</div>
+        <div class="link-sub">Weekly money insights</div>
+      </div>
+      <span class="badge">Soon</span>
+    </div>
+
+    <div class="link-item" style="opacity:0.5;cursor:default;" onclick="return false">
+      <div class="link-icon">🐦</div>
+      <div class="link-body">
+        <div class="link-title">Twitter / X</div>
+        <div class="link-sub">Quick takes & tips</div>
+      </div>
+      <span class="badge">Soon</span>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <a href="https://moneydecoded.net">moneydecoded.net</a>
+  </div>
+
+</div>
+</body>
+</html>
